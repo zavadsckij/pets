@@ -62,7 +62,7 @@
 
 	$('.slider').slick(obj);//init slider
 
-	$('.slider-btn').click(()=>{//change slider to big version
+	$('.slider-btn').click( () =>{//change slider to big version
 
     if (!$('.slider-btn').hasClass('visited')) {
       $('.slider').slick('unslick');  

@@ -3,6 +3,8 @@ const rename = require('gulp-rename')
 const sass = require('gulp-sass')
 const browserSync = require('browser-sync').create()
 const imagemin = require('gulp-imagemin');
+const uglify = require('gulp-uglify-es').default;
+const autoprefixer = require('gulp-autoprefixer')
 
 function minImg (){
     gulp.src('./images/*')
@@ -27,6 +29,9 @@ function cssStyle(done) {
 		errorLogToConsole:true,
 		outputStyle:'compressed'
 	}))
+	.pipe(autoprefixer({
+		browsers:['>0.1%']
+	}))
 	.on('error', console.error.bind(console))
 		.pipe(rename({suffix:'.min'}))
 		.pipe( gulp.dest('./css/'))
@@ -35,6 +40,15 @@ function cssStyle(done) {
 	done()	
 
 }
+
+const  minJs = (done) => {
+	gulp.src('scripts/index.js')
+	.pipe(uglify())
+	.pipe(rename({suffix:'.min'}))
+	.pipe(gulp.dest('scripts/'))
+	done()
+}
+
 function reload(done) {
 	browserSync.reload()
 	done()
@@ -56,6 +70,7 @@ function sync(done){
 	done();
 }
 
-gulp.task('min', minImg)
+gulp.task('uglify', minJs)
+gulp.task('minImg', minImg)
  
 gulp.task('default', gulp.parallel(watchFiles, sync));
