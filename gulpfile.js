@@ -2,6 +2,23 @@ const gulp = require('gulp');
 const rename = require('gulp-rename')
 const sass = require('gulp-sass')
 const browserSync = require('browser-sync').create()
+const imagemin = require('gulp-imagemin');
+
+function minImg (){
+    gulp.src('./images/*')
+	.pipe(imagemin([
+		imagemin.gifsicle({interlaced: true}),
+		imagemin.mozjpeg({quality: 75, progressive: true}),
+		imagemin.optipng({optimizationLevel: 5}),
+		imagemin.svgo({
+			plugins: [
+				{removeViewBox: true},
+				{cleanupIDs: false}
+			]
+		})
+	]))
+        .pipe(gulp.dest('img/'))
+};
 
  
 function cssStyle(done) {
@@ -38,5 +55,7 @@ function sync(done){
 	})
 	done();
 }
+
+gulp.task('min', minImg)
  
 gulp.task('default', gulp.parallel(watchFiles, sync));
